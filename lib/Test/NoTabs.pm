@@ -10,7 +10,7 @@ use File::Find;
 
 use vars qw( $VERSION $PERL $UNTAINT_PATTERN $PERL_PATTERN);
 
-$VERSION = '0.4';
+$VERSION = '0.5';
 
 $PERL    = $^X || 'perl';
 $UNTAINT_PATTERN  = qr|^([-+@\w./:\\]+)$|;
@@ -119,7 +119,7 @@ sub _module_to_path {
 
 sub _make_plan {
     unless ($Test->has_plan) {
-        $Test->plan( no_plan => 1 );
+        $Test->plan( 'no_plan' );
     }
     $Test->expected_tests;
 }

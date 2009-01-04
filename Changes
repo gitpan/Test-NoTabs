@@ -13,3 +13,9 @@ Revision history for Test-NoTabs
 0.4  2008-12-14
      - Change to Module::Install so that we install 
        cleanly on a fresh perl 5.8
+
+0.5  2009-01-04
+     - Start building dist with ShipIt
+     - Change to remove warnings in newer versions of
+       Test::Builder (Florian Ragwitz)
+
