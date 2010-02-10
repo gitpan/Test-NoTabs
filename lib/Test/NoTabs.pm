@@ -10,7 +10,7 @@ use File::Find;
 
 use vars qw( $VERSION $PERL $UNTAINT_PATTERN $PERL_PATTERN);
 
-$VERSION = '0.9';
+$VERSION = '1.0';
 
 $PERL    = $^X || 'perl';
 $UNTAINT_PATTERN  = qr|^([-+@\w./:\\]+)$|;
@@ -71,7 +71,7 @@ sub notabs_ok {
     while (<$fh>) {
         $line++;
         next if (/^\s*#/);
-        next if (/^\s*=.+/ .. /^\s*=(cut|back|end)/);
+        next if (/^\s*=.+/ .. (/^\s*=(cut|back|end)/ || eof($fh)));
         last if (/^\s*(__END__|__DATA__)/);
         if ( /\t/ ) {
           $Test->ok(0, $test_txt . " on line $line");
@@ -85,8 +85,8 @@ sub notabs_ok {
 sub all_perl_files_ok {
     my @files = _all_perl_files( @_ );
     _make_plan();
-    foreach my $file ( @files ) {
-      notabs_ok($file);
+    foreach my $file ( sort @files ) {
+      notabs_ok($file, "No tabs in '$file'");
     }
 }
 
@@ -98,7 +98,7 @@ sub _is_perl_script {
     my $file = shift;
     return 1 if $file =~ /\.pl$/i;
     return 1 if $file =~ /\.t$/;
-    open my $fh, $file or return;
+    open (my $fh, $file) or return;
     my $first = <$fh>;
     return 1 if defined $first && ($first =~ $PERL_PATTERN);
     return;
